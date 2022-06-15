@@ -34,6 +34,18 @@
   margin-left:20px;
 }
 
+.note-text {
+  font-size:10px;
+  
+}
+
+.note-text_wrapper {
+  display:flex;
+  justify-content:left;
+  padding: 5px 20px;
+  max-width: 300px;
+}
+
 .note-count {
   margin-left: 1em;
   font-size: 15px;
@@ -55,14 +67,28 @@
   margin: 20px;
 }
 
-.completed {
-  font-size:20px;
-  color:green;
+.addNote {
+  background-color: #357486;
+  color:white;
+  font-weight: bold;
+  font-size: medium;
+  padding: 5px 10px 5px 10px;
+  text-decoration: underline;
+  margin-right:20px;
 }
 
-.incomplete {
+.addNote:hover {
+  background-color: antiquewhite;
+}
+
+.archived {
   font-size:20px;
-  color:rgb(128, 0, 0);
+  color:rgb(233, 95, 3);
+}
+
+.active {
+  font-size:20px;
+  color:rgb(0, 128, 0);
 }
 
 .App-logo {

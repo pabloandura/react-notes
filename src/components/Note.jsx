@@ -2,7 +2,7 @@ import React from 'react';
 import NoteDialog from './NoteDialog'
 import { Grid } from '@mui/material'
 
-const Note = ({noteNum, noteName, notes, setNotes}) => {
+const Note = ({noteNum, noteName, notes, setNotes, noteText}) => {
     /** Item list inside NoteContainer, you may delete or complete them. 
      * Once you complete a note you may also Archive it.*/
     
@@ -11,25 +11,26 @@ const Note = ({noteNum, noteName, notes, setNotes}) => {
             return (noteName === obj.name) 
             }
         )
-        selection[0].completed = !selection[0].completed
+        selection[0].archived = !selection[0].archived
         let theRest = notes.filter( (obj) => {
             return (noteName !== obj.name) 
             }
         )
         setNotes([selection[0],...theRest])
+        console.log(selection)
     }
     return(
             <Grid item xs={12} className='note-item'>
                 <div className='note-checkbox' onClick={handleCheckboxClick}>
                     {
-                    notes[noteNum-1].completed
+                    notes[noteNum].archived
                     ?
-                    <p className='completed'><span aria-label='completed checkmark' role="img" >✔️</span></p>
+                    <p className='archived'><span aria-label='filing cabinet' role="img" >🗄️</span></p>
                     :
-                    <p className='incomplete'><span aria-label='incomplete cross' role="img" >❌</span></p>
+                    <p className='active'><span aria-label='sun emoji' role="img" >🌞</span></p>
                     }
                 </div>
-                <NoteDialog noteNum={noteNum} noteName={noteName}/>
+                <NoteDialog noteNum={noteNum} noteName={noteName} noteText={noteText}/>
             </Grid>            
     )
 }

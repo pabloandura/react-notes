@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { NotesContext } from './NotesContextProvider';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
@@ -7,35 +8,54 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 
 
-const emails = ['Archive', 'Dinasour'];
+function NoteDialog({ onClose, selectedValue, open, noteNum, setSelectedValue }) {
 
-function NoteDialog(props) {
-  const { onClose, selectedValue, open } = props;
+  const LIST = React.useContext(NotesContext)
 
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
+  const deleteNote = (noteNum) => {
+    let temp = LIST.noteList.filter((note, index) => {
+      return (index !== noteNum)
+    })
+    LIST.setNoteList(temp)
+  }
 
-  const handleListItemClick = (value) => {
+  const archiveNote = (noteNum) => {
+    let selection = LIST.noteList.filter( (obj, index) => {
+        return (noteNum === index) 
+        }
+    )
+    selection[0].archived = !selection[0].archived
+    let theRest = LIST.noteList.filter( (obj, index) => {
+        return (noteNum !== index) 
+        }
+    )
+    LIST.setNoteList([selection[0],...theRest])
+    console.log(selection)
+  }
+
+  const handleClose = (value) => {
     onClose(value);
   };
-
+  
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Note Actions</DialogTitle>
+      <DialogTitle>Note {noteNum} Actions</DialogTitle>
       <List sx={{ pt: 0 }}>
-        {
-        emails.map((email) => (
-          <ListItem button onClick={() => handleListItemClick(email)} key={email}>
-            {email}
-          </ListItem>
-          )
-        )
-        }
-
-        <ListItem autoFocus button onClick={() => handleListItemClick('del')}>
+        <ListItem button onClick={(e) => {
+            setSelectedValue('Delete');
+            deleteNote(noteNum);
+            onClose('Delete');
+          }} >
             Delete
         </ListItem>
+        <ListItem button onClick={(e) => {
+            setSelectedValue('Archive');
+            archiveNote(noteNum);
+            onClose('Archive')
+          }} >
+            Archive
+        </ListItem>
+        
       </List>
     </Dialog>
   );
@@ -47,10 +67,10 @@ NoteDialog.propTypes = {
   selectedValue: PropTypes.string.isRequired,
 };
 
-export default function NoteDialogDemo({noteName, noteNum}) {
+export default function NoteDialogDemo({noteName, noteNum, noteText}) {
   const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
-  
+  const [selectedValue, setSelectedValue] = React.useState('Other');
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -58,8 +78,10 @@ export default function NoteDialogDemo({noteName, noteNum}) {
 
   const handleClose = (value) => {
     setOpen(false);
-    setSelectedValue(value);
+    setSelectedValue((value));
   };
+    
+
 
   return (
     <div>
@@ -70,7 +92,14 @@ export default function NoteDialogDemo({noteName, noteNum}) {
         selectedValue={selectedValue}
         open={open}
         onClose={handleClose}
+        noteNum={noteNum}
+        setSelectedValue={setSelectedValue}
       />
+      <div className='note-text_wrapper'>
+        <p className='note-text'>
+          {noteText}
+        </p>
+      </div>
     </div>
   );
 }

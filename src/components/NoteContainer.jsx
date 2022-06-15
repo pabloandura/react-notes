@@ -15,16 +15,16 @@ const NoteContainer = () => {
         <Grid item xs={8}>
             <Grid container className='note-container'>
             {
-            LIST.noteList.map( (note,index) => {
+            LIST.noteList.map( (note, index) => {
                 return(
                     <div className='note-wrapper' key={`${note.key}NOTA`}>
                         <Note 
-                            noteNum={index+1} 
                             noteName={note.name} 
-                            num={note.num}
-                            noteCompleted={note.completed} 
+                            noteNum={index}
+                            noteArchived={note.archived} 
                             setNotes={LIST.setNoteList}
                             notes={LIST.noteList}
+                            noteText={note.text}
                             />
                     </div>
                 )
